@@ -29,7 +29,8 @@ function load_es_data(){
     $.getJSON('/api-dsl/es/data/victoria/hearing/.json',function(data){
         $('#home').empty()
         template = Handlebars.templates['tmpl-es']
-        $('#home').append(template(data))
+        console.log(data)
+        $('#home').append(JSON.stringify(data))
 
     })
 }
