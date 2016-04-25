@@ -20,9 +20,19 @@ $(function() {
                     return ""
                 } 
     });
+    load_es_data();
     //$('#reset_password').click(function(){$('#pass_form').toggle(!$('#pass_form').is(':visible'));});
     //$('#user_form').submit(function(){var formData = JSON.parse($("#user_form").serializeArray());console.log(formData);return false;})
 });//End of Document Ready
+
+function load_es_data(){
+    $.getJSON('/api-dsl/es/data/victoria/hearing/.json',function(data){
+        $('#home').empty()
+        template = Handlebars.templates['tmpl-es']
+        $('#home').append(template(data))
+
+    })
+}
 
 function submit_user(){
     console.log(user_url)
