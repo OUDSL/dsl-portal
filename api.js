@@ -1,16 +1,16 @@
 $(function() {
     //Customize by setting base_url to cybercom/api docker application
-    base_url = "/api-dsl";
+    base_url = "https://dev.libraries.ou.edu/api-dsl";
     //No other alterations is need to get the standard applicaiton running!
     login_url = base_url + "/api-auth/login/?next=";
     logout_url = base_url + "/api-auth/logout/?next=";
     user_task_url = base_url + "/queue/usertasks/.json?page_size=10";
     user_url = base_url + "/user/?format=json";
     prevlink=null;nextlink=null;
-    set_auth(base_url,login_url);
+    //set_auth(base_url,login_url);
     $("#aprofile").click(function(){activaTab('profile')})
     $("#alogout").click(function(){window.location = logout_url.concat(document.URL);})
-    load_task_history(user_task_url);
+    //load_task_history(user_task_url);
     $('#prevlink').click(function(){load_task_history(prevlink);});
     $('#nextlink').click(function(){load_task_history(nextlink);});
     Handlebars.registerHelper('json_metatags', function(context) {
@@ -26,7 +26,7 @@ $(function() {
 });//End of Document Ready
 
 function load_es_data(){
-    $.getJSON('/api-dsl/es/data/victoria/hearing/.json',function(data){
+    $.getJSON(base_url + '/es/data/victoria/hearing/.json',function(data){
         $('#home').empty()
         template = Handlebars.templates['tmpl-es']
         console.log(data)
