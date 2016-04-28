@@ -33,6 +33,8 @@ function load_es_data(){
         $('#home').append(template({}))
         $.each(data.hits.hits,function(itm,val){
             $("#result_tbody").append(val._source)
+            console.log(itm)
+            console.log(val)
         })
 	// mydata = {'hits':JSON.stringify(data,null,4)}
         console.log(data)
