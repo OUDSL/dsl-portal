@@ -29,9 +29,14 @@ function load_es_data(){
     $.getJSON(base_url + '/es/data/victoria/hearing/.json',function(data){
         $('#home').empty()
         template = Handlebars.templates['tmpl-es']
-	mydata = {'hits':JSON.stringify(data,null,4)}
+        tr_tmpl=Handlebars.templates['tmpl-tres']
+        $('#home').append(template({}))
+        $.each(data.hits.hits,function(itm,val){
+            $("#result_tbody").append(val._source)
+        })
+	// mydata = {'hits':JSON.stringify(data,null,4)}
         console.log(data)
-        $('#home').append(template(mydata))
+        
 
     })
 }
