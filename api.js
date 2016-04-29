@@ -21,6 +21,7 @@ $(function() {
                 } 
     });
     $('#user').hide()
+    $('#myTab').hide()
     load_es_data();
 });//End of Document Ready
 
