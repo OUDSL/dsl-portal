@@ -26,23 +26,46 @@ $(function() {
 });//End of Document Ready
 
 function load_es_data(){
-    $.getJSON(base_url + '/es/data/victoria/hearing/.json',function(data){
-        $('#home').empty()
-        template = Handlebars.templates['tmpl-es']
-        tr_tmpl=Handlebars.templates['tmpl-tres']
-        $('#home').append(template({}))
-        $.each(data.hits.hits,function(itm,val){
-            $("#result_tbody").append(val._source)
-            console.log(itm)
-            console.log(val)
-        })
-	// mydata = {'hits':JSON.stringify(data,null,4)}
-        console.log(data)
-        
-
-    })
+    $('#home').empty()
+    template = Handlebars.templates['tmpl-es']
+    tr_tmpl=Handlebars.templates['tmpl-tres']
+    $('#home').append(template({}))
+    $('#submitSearch').click(function(){search($('#search').val());});
+    $("#search").keyup(function(event){if(event.keyCode == 13){$("#submitSearch").click();}});
 }
-
+function search(term){
+     url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'query_string':{'query':'" + term + "'}}}"
+     lines_above_below = 3
+     $("#result_tbody").empty();
+     $.getJSON( url ,function(data){
+        tr_tmpl=Handlebars.templates['tmpl-tres']
+        $.each(data.hits.hits,function(itm,val){
+	   content_lines(val,3,tr_tmpl,"result_tbody") 
+        });
+     });
+}
+function content_lines(val,lines,templ,html){
+     //console.log(val._id)
+     lowEnd= parseInt(val._id) - lines;
+     highEnd = parseInt(val._id) + lines;
+     list = [];
+     //console.log(lowEnd);
+     //console.log(highEnd)
+     for (var i=lowEnd;i<=highEnd;i++){list.push(i);}
+     console.log(list)
+     ids= list.join(",")
+     url = base_url + "/es/data/victoria/hearing/.json?esaction=mget&ids="+ ids
+     //console.log(url)
+     temp_data = ""
+     $.getJSON( url ,function(data){
+	$.each(data.docs,function(i,v){
+	    if(v.found && v._source.TAG == val._source.TAG){
+	    	temp_data= temp_data + v._source.DATA + "  "
+	    }
+	});
+	$("#" + html).append(templ({"TAG":val._source.TAG,"DATA":temp_data}))
+     });
+}
 function submit_user(){
     console.log(user_url)
     $.post( user_url,$('#user_form').serializeObject(),function(data){
