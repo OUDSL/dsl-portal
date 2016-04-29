@@ -34,7 +34,9 @@ function load_es_data(){
     $("#search").keyup(function(event){if(event.keyCode == 13){$("#submitSearch").click();}});
 }
 function search(term){
-     url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'query_string':{'query':'" + term + "'}}}"
+     //url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'query_string':{'query':'" + term + "'}}}"
+     //multiple word match
+     url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match':{'DATA':'" + term + "'}}}"
      lines_above_below = 3
      $("#result_tbody").empty();
      $.getJSON( url ,function(data){
