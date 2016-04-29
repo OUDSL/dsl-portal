@@ -36,7 +36,9 @@ function load_es_data(){
 function search(term){
      //url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'query_string':{'query':'" + term + "'}}}"
      //multiple word match
-     url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match':{'DATA':{'query':'" + term + "','operator':'and'}}}}"
+     //url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match':{'DATA':{'query':'" + term + "','operator':'and'}}}}"
+    //Phrase Matching
+     url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match_phrase':{'DATA':{'query':'" + term + "','type':'phrase'}}}}"
      //need to add a user element to assign the lines above and below
      lines_above_below = 4
      $("#result_tbody").empty();
