@@ -37,7 +37,8 @@ function search(term){
      //url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'query_string':{'query':'" + term + "'}}}"
      //multiple word match
      url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match':{'DATA':'" + term + "'}}}"
-     lines_above_below = 3
+     //need to add a user element to assign the lines above and below
+     lines_above_below = 4
      $("#result_tbody").empty();
      $.getJSON( url ,function(data){
         tr_tmpl=Handlebars.templates['tmpl-tres']
@@ -47,17 +48,12 @@ function search(term){
      });
 }
 function content_lines(val,lines,templ,html){
-     //console.log(val._id)
      lowEnd= parseInt(val._id) - lines;
      highEnd = parseInt(val._id) + lines;
      list = [];
-     //console.log(lowEnd);
-     //console.log(highEnd)
      for (var i=lowEnd;i<=highEnd;i++){list.push(i);}
-     console.log(list)
      ids= list.join(",")
      url = base_url + "/es/data/victoria/hearing/.json?esaction=mget&ids="+ ids
-     //console.log(url)
      temp_data = ""
      $.getJSON( url ,function(data){
 	$.each(data.docs,function(i,v){
