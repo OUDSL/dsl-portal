@@ -66,6 +66,7 @@ function content_lines(val,lines,templ,html){
 	    }
 	});
 	$("#" + html).append(templ({"TAG":val._source.TAG,"DATA":temp_data}))
+        $("#" + html).highlight($('#search').val());
      });
 }
 function submit_user(){
