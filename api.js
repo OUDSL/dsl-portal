@@ -20,9 +20,8 @@ $(function() {
                     return ""
                 } 
     });
+    $('#user').hide()
     load_es_data();
-    //$('#reset_password').click(function(){$('#pass_form').toggle(!$('#pass_form').is(':visible'));});
-    //$('#user_form').submit(function(){var formData = JSON.parse($("#user_form").serializeArray());console.log(formData);return false;})
 });//End of Document Ready
 
 function load_es_data(){
