@@ -61,9 +61,9 @@ function content_lines(val,lines,templ,html){
 	$.each(data.docs,function(i,v){
 	    if(v.found && v._source.TAG == val._source.TAG){
                 if(v._id == val._id){ 
-                    temp_data= temp_data + "<hr><span class='es_search'>" v._source.DATA + "</span><hr>"
+                    temp_data= temp_data + "<hr><span class='es_search'>" v._source.DATA + "</span><hr>";
                 }else{
-	    	    temp_data= temp_data + v._source.DATA + "  "
+	    	    temp_data= temp_data + v._source.DATA + "  ";
                 }
 	    }
 	});
