@@ -34,11 +34,11 @@ function load_es_data(){
     $("#search").keyup(function(event){if(event.keyCode == 13){$("#submitSearch").click();}});
 }
 function search(term){
-     //url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'query_string':{'query':'" + term + "'}}}"
+     url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'query_string':{'query':'" + term + "'}}}"
      //multiple word match
      //url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match':{'DATA':{'query':'" + term + "','operator':'and'}}}}"
     //Phrase Matching
-     url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match_phrase':{'DATA':{'query':'" + term + "','type':'phrase'}}}}"
+     //url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match_phrase':{'DATA':{'query':'" + term + "','type':'phrase'}}}}"
      //need to add a user element to assign the lines above and below
      lines_above_below = 4
      $("#result_tbody").empty();
