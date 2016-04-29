@@ -60,11 +60,15 @@ function content_lines(val,lines,templ,html){
      $.getJSON( url ,function(data){
 	$.each(data.docs,function(i,v){
 	    if(v.found && v._source.TAG == val._source.TAG){
-	    	temp_data= temp_data + v._source.DATA + "  "
+                if(v._id == val._id){ 
+                    temp_data= temp_data + "<hr><span class='es_search'>" v._source.DATA + "</span><hr>"
+                }else{
+	    	    temp_data= temp_data + v._source.DATA + "  "
+                }
 	    }
 	});
 	$("#" + html).append(templ({"TAG":val._source.TAG,"DATA":temp_data}))
-        $("#" + html).highlight($('#search').val().split(" "));
+        $(".es_search").highlight($('#search').val().split(" "));
      });
 }
 function submit_user(){
