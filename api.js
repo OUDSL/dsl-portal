@@ -40,12 +40,12 @@ function search(term){
     //Phrase Matching
      //url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match_phrase':{'DATA':{'query':'" + term + "','type':'phrase'}}}}"
      //need to add a user element to assign the lines above and below
-     lines_above_below = 4
+     lines_above_below = 3
      $("#result_tbody").empty();
      $.getJSON( url ,function(data){
         tr_tmpl=Handlebars.templates['tmpl-tres']
         $.each(data.hits.hits,function(itm,val){
-	   content_lines(val,3,tr_tmpl,"result_tbody") 
+	   content_lines(val,lines_above_below,tr_tmpl,"result_tbody") 
         });
      });
 }
@@ -56,16 +56,21 @@ function content_lines(val,lines,templ,html){
      for (var i=lowEnd;i<=highEnd;i++){list.push(i);}
      ids= list.join(",")
      url = base_url + "/es/data/victoria/hearing/.json?esaction=mget&ids="+ ids
-     temp_data = ""
+     // console.log(ids);
+     
      $.getJSON( url ,function(data){
+        temp_data = ""
 	$.each(data.docs,function(i,v){
 	    if(v.found && v._source.TAG == val._source.TAG){
+
                 //if(v._id == val._id){ 
                 //    temp_data= temp_data + "<hr><span class='es_search'>" +  v._source.DATA + "</span><hr>";
                 //}else{
 	    	temp_data= temp_data + v._source.DATA + "  ";
                 //}
 	    }
+        // console.log(temp_data);
+        // temp_data="";
 	});
 	$("#" + html).append(templ({"TAG":val._source.TAG,"DATA":temp_data}))
         $("#" + html).highlight($('#search').val().split(" "));
