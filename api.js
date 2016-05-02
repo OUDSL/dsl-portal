@@ -34,11 +34,11 @@ function load_es_data(){
     $("#search").keyup(function(event){if(event.keyCode == 13){$("#submitSearch").click();}});
 }
 function search(term){
-     url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'query_string':{'query':'" + term + "'}}}"
+     // url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'query_string':{'query':'" + term + "'}}}"
      //multiple word match
-     //url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match':{'DATA':{'query':'" + term + "','operator':'and'}}}}"
+     // url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match':{'DATA':{'query':'" + term + "','operator':'and'}}}}"
     //Phrase Matching
-     //url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match_phrase':{'DATA':{'query':'" + term + "','type':'phrase'}}}}"
+     url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match_phrase':{'DATA':{'query':'" + term + "','type':'phrase'}}}}"
      //need to add a user element to assign the lines above and below
      lines_above_below = 3
      $("#result_tbody").empty();
@@ -72,7 +72,7 @@ function content_lines(val,lines,templ,html){
         // console.log(temp_data);
         // temp_data="";
 	});
-	$("#" + html).append(templ({"TAG":val._source.TAG,"DATA":temp_data}))
+	$("#" + html).append(templ({"LINK":"/data/web_data/static/dsl-portal/htmlfiles/"+val._source.TAG+".htm","TAG":val._source.TAG,"DATA":temp_data}))
         $("#" + html).highlight($('#search').val().split(" "));
      });
 }
