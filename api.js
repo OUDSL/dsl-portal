@@ -49,6 +49,13 @@ function search(term){
         $.each(data.hits.hits,function(itm,val){
 	   content_lines(val,lines_above_below,tr_tmpl,"result_tbody") 
         });
+        try {
+            tot_ret = data.hits.total
+            hear_total = data.aggregations.hearing_count.value
+            $('#result_nums').text("Search Results: " + tot_ret.toString() + " results found, Total Hearings  " +  hear_total.toString() );
+        }catch(e){
+            console.log(e);
+        }
      });
 }
 function content_lines(val,lines,templ,html){
