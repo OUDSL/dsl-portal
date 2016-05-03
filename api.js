@@ -72,7 +72,7 @@ function content_lines(val,lines,templ,html){
         // console.log(temp_data);
         // temp_data="";
 	});
-	$("#" + html).append(templ({"LINK":"/data/web_data/static/dsl-portal/htmlfiles/"+val._source.TAG+".htm","TAG":val._source.TAG,"DATA":temp_data}))
+	$("#" + html).append(templ({"LINK":"/dsl-portal/htmlfiles/"+val._source.TAG+".htm","TAG":val._source.TAG,"DATA":temp_data}))
         $("#" + html).highlight($('#search').val().split(" "));
      });
 }
