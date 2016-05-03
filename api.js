@@ -40,7 +40,7 @@ function search(term){
     //Phrase Matching
      url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match_phrase':{'DATA':{'query':'" + term + "','type':'phrase'}}}}"
      //need to add a user element to assign the lines above and below
-     lines_above_below = 3
+     lines_above_below = 10
      $("#result_tbody").empty();
      $.getJSON( url ,function(data){
         tr_tmpl=Handlebars.templates['tmpl-tres']
