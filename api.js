@@ -38,7 +38,9 @@ function search(term){
      //multiple word match
      // url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match':{'DATA':{'query':'" + term + "','operator':'and'}}}}"
     //Phrase Matching
-     url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match_phrase':{'DATA':{'query':'" + term + "','type':'phrase'}}}}"
+     url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match_phrase':{'DATA':{'query':'" + term + "','type':'phrase'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
+     //{'query':{'match_phrase':{'DATA':{'query':'policy','type':'phrase'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}
+    //"aggs":{"hearing_count":{"cardinality":{"field":"TAG"}}}
      //need to add a user element to assign the lines above and below
      lines_above_below = 10
      $("#result_tbody").empty();
