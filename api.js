@@ -52,7 +52,8 @@ function search(term){
         try {
             tot_ret = data.hits.total
             hear_total = data.aggregations.hearing_count.value
-            $('#result_nums').text("Search Results: " + tot_ret.toString() + " results found, Total Hearings  " +  hear_total.toString() );
+            if ( hear_total > tot_ret ){hear_total = tot_ret;}
+            $('#result_nums').text("Search Results: " + tot_ret.toString() + "  Total Hearings:  " +  hear_total.toString() );
         }catch(e){
             console.log(e);
         }
