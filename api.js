@@ -36,6 +36,7 @@ function load_es_data(){
 function search(term){
     console.log(term)
      url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'query_string':{'query':'" + term + "'}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}}"
+    console.log(url)
      //multiple word match
      // url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match':{'DATA':{'query':'" + term + "','operator':'and'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}}"
     //Phrase Matching
