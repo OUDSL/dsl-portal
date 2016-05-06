@@ -34,8 +34,16 @@ function load_es_data(){
     $("#search").keyup(function(event){if(event.keyCode == 13){$("#submitSearch").click();}});
 }
 function search(term){
+    ckecked_val="0"
+    $.each($('.optradio'),function(ob){ if (ob.checked){ckecked_val=$(ob).val();}})
     //console.log(term)
-    url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'query_string':{'query':'" + term + "'}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
+    if (checked_value=="0"){
+        url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'query_string':{'query':'" + term + "'}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
+    else if (checked_value=="1"){
+        url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match':{'DATA':{'query':'" + term + "','operator':'and'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
+    }else{
+        url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match_phrase':{'DATA':{'query':'" + term + "','type':'phrase'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
+    }
     //console.log(url)
      //multiple word match
     //url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match':{'DATA':{'query':'" + term + "','operator':'and'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
