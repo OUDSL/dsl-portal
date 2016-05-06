@@ -34,8 +34,8 @@ function load_es_data(){
     $("#search").keyup(function(event){if(event.keyCode == 13){$("#submitSearch").click();}});
 }
 function search(term){
-    ckecked_val="0"
-    $.each($('.optradio'),function(ob){ if (ob.checked){ckecked_val=$(ob).val();}})
+    checked_value="0"
+    $.each($('.optradio'),function(ob){ if (ob.checked){checked_value=$(ob).val();}})
     //console.log(term)
     if (checked_value=="0"){
         url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'query_string':{'query':'" + term + "'}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
