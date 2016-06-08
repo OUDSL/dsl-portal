@@ -23,6 +23,51 @@ $(function() {
     $('#user').hide()
     $('#myTab').hide()
     load_es_data();
+
+
+    $(hhrgbox).change(function()
+    {
+        if(this.checked)
+        {
+            filterhide("shrg");
+            filterhide("jhrg");
+        }
+
+        else
+        {
+            filtershow("shrg");
+            filtershow("jhrg");
+        }
+    });
+
+    $(shrgbox).change(function()
+    {
+        if(this.checked)
+        {
+            filterhide("hhrg");
+            filterhide("jhrg");
+        }
+
+        else
+        {
+            filtershow("hhrg");
+            filtershow("jhrg");
+        }
+    });
+    $(jhrgbox).change(function()
+    {
+        if(this.checked)
+        {
+            filterhide("hhrg");
+            filterhide("shrg");
+        }
+
+        else
+        {
+            filtershow("hhrg");
+            filtershow("shrg");
+        }
+    });
 });//End of Document Ready
 
 function load_es_data(){
@@ -30,8 +75,12 @@ function load_es_data(){
     template = Handlebars.templates['tmpl-es']
     tr_tmpl=Handlebars.templates['tmpl-tres']
     $('#home').append(template({}))
-    $('#submitSearch').click(function(){search($('#search').val());});
-    $("#search").keyup(function(event){if(event.keyCode == 13){$("#submitSearch").click();}});
+    $('#submitSearch').click(function(){
+        search($('#search').val());
+    });
+    $("#search").keyup(function(event){if(event.keyCode == 13){$("#submitSearch").click();
+}});
+
 }
 function search(term){
     checked_value=$('input[name=optradio]:checked').val()
@@ -66,7 +115,8 @@ function search(term){
         }catch(e){
             console.log(e);
         }
-     });
+     }
+     );
 }
 function content_lines(val,lines,templ,html){
      lowEnd= parseInt(val._id) - lines;
@@ -90,7 +140,9 @@ function content_lines(val,lines,templ,html){
 	    }
         // console.log(temp_data);
         // temp_data="";
-	});
+
+	}
+    );
 	$("#" + html).append(templ({"LINK":"/dsl-portal/htmlfiles/"+val._source.TAG+".htm","TAG":val._source.TAG,"DATA":temp_data}))
         $("#" + html).highlight($('#search').val().split(" "));
      });
@@ -246,3 +298,27 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+function filterhide(input)
+    {
+        $("tr td.tag").each(function() {
+            if($(this).text().trim().substring(8,12) == input)
+            {
+                $(this).parent().hide();
+            }
+        });
+    }
+
+    function filtershow(input)
+    {
+        $("tr td.tag").each(function() {
+            if($(this).text().trim().substring(8,12) == input)
+            {
+                $(this).parent().show();
+            }
+        });
+    }
+
+
+
+
