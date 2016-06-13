@@ -6,3 +6,5 @@ Application template for use with [restful-api](https://github.com/ouinformatics
 * bootstrap
 * jquery
 * handlebars
+
+Change to test shared repo on server!!!
