@@ -125,9 +125,8 @@ $(function() {
 
     $("#final").on("click",function()
     {
-
-        // console.log(result);
-        JSONToCSVConvertor(result,"Output",true);
+        // console.log(unique(result));
+        JSONToCSVConvertor(unique(result),"Output",true);
 
     });
 
@@ -454,6 +453,26 @@ function filterhide(input)
         link.click();
         document.body.removeChild(link);
     }
+
+    function unique(origArr){
+    var newArr = [],
+        origLen = origArr.length,
+        found, x, y;
+
+    for (x = 0; x < origLen; x++) {
+        found = undefined;
+        for (y = 0; y < newArr.length; y++) {
+            if (origArr[x].tag === newArr[y].tag) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            newArr.push(origArr[x]);
+        }
+    }
+    return newArr;
+}
 
 
 
