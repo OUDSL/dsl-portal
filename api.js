@@ -6,7 +6,7 @@ $(function() {
     logout_url = base_url + "/api-auth/logout/?next=";
     user_task_url = base_url + "/queue/usertasks/.json?page_size=10";
     user_url = base_url + "/user/?format=json";
-    prevlink=null;nextlink=null;
+    prevlink=null;nextlink=null;page=0;page_size=50;searchterm="";total_pages=0;
     //set_auth(base_url,login_url);
     $("#aprofile").click(function(){activaTab('profile')})
     $("#alogout").click(function(){window.location = logout_url.concat(document.URL);})
@@ -138,6 +138,13 @@ function load_es_data(){
     tr_tmpl=Handlebars.templates['tmpl-tres']
     $('#home').append(template({}))
     $('#submitSearch').click(function(){
+        page=0;total_pages=0;
+        $('#paginate-div').empty();
+        $('#paginate-div-bt').empty();
+        template = Handlebars.templates['tmpl-page']
+        $('#paginate-div').append(template({}))
+        $('#paginate-div-bt').append(template({}))
+        searchterm=$('#search').val()
         search($('#search').val());
     });
     $("#search").keyup(function(event){if(event.keyCode == 13){$("#submitSearch").click();
@@ -154,20 +161,38 @@ function search(term){
     }else{
         url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match_phrase':{'DATA':{'query':'" + term + "','type':'phrase'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
     }
-    //console.log(url)
-     //multiple word match
-    //url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match':{'DATA':{'query':'" + term + "','operator':'and'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
-    //Phrase Matching
-    //url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match_phrase':{'DATA':{'query':'" + term + "','type':'phrase'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
-     //{'query':{'match_phrase':{'DATA':{'query':'policy','type':'phrase'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}
-    //"aggs":{"hearing_count":{"cardinality":{"field":"TAG"}}}
      //need to add a user element to assign the lines above and below
-     lines_above_below = 10
-     $("#result_tbody").empty();
-     $.getJSON( url ,function(data){
+     lines_above_below = 5;
+     if (page == 0){
+        $("#result_tbody").empty();
+        url_param = "&page=1&page_size=" + page_size
+     }else{
+        url_param = "&page="+ page + "&page_size=" + page_size
+    }
+     $.getJSON( url + url_param ,function(data){
+        //Set up pagination 
+        if (page==0){
+            total_pages=Math.ceil(data.hits.total/page_size)
+            $('.sync-pagination').twbsPagination({
+                totalPages: total_pages,
+                visiblePages: 15,
+                onPageClick: function (event, page_num) {
+                    page=page_num;
+                    if (page_num !=1){
+                        if ($(".page"+page).length==0){
+                            search(searchterm);
+                        }
+                    }
+                    $('.tr-all').hide();
+                    $(".page"+page).show();
+                    $('.page-content').text('Page ' + page_num +' of ' + total_pages);
+                }
+            });
+            page=1;
+        }
         tr_tmpl=Handlebars.templates['tmpl-tres']
         $.each(data.hits.hits,function(itm,val){
-	   content_lines(val,lines_above_below,tr_tmpl,"result_tbody") 
+	   content_lines(val,lines_above_below,tr_tmpl,"result_tbody",page) 
         });
         try {
             tot_ret = data.hits.total
@@ -205,8 +230,8 @@ function content_lines(val,lines,templ,html){
 
 	}
     );
-	$("#" + html).append(templ({"LINK":"/dsl-portal/htmlfiles/"+val._source.TAG+".htm","TAG":val._source.TAG,"DATA":temp_data}))
-        $("#" + html).highlight($('#search').val().split(" "));
+	$("#" + html).append(templ({"PAGE":"page"+page,"LINK":"/dsl-portal/htmlfiles/"+val._source.TAG+".htm","TAG":val._source.TAG,"DATA":temp_data}))
+        $("#" + html).highlight($('#search').val().replace(/\"/g," ").trim().split(" "));
      });
 }
 function submit_user(){
