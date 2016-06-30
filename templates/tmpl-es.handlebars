@@ -1,7 +1,7 @@
 <div>
 <div class="form-inline" style="margin-bottom:5px">
 <label class="control-label" for="ssearch">Search</label>
-<input type="text" class="form-control" name="ssearch" id="search" style="min-width:50%;max-width:60%">
+<input type="text" class="form-control" name="ssearch" id="search" style="min-width:50%;max-width:60%"><label class="control-label" for="cline">Context Lines</label><input type="number" id="contextlines" name="cline" class="form-control bfh-number" min="0" max="10" value=5 style="width:80px">
 <button class="btn btn-primary" id="submitSearch">Search</button><label style="float:right;margin-right:10%" id="result_nums"></label>
 </div>
 <div class="form-control" style="margin-bottom:30px;">
@@ -14,7 +14,7 @@
         <label><input id="jhrgbox" type="checkbox" value="jhrg">Filter Joint</label>
     </div>
 </div>
-<div id="paginate-div" style="text-align:center"> <ul id="pagination-demo" class="pagination-sm"></ul><div id="page-content" class="well"></div></div>
+<div id="paginate-div" style="text-align:center"></div>
 <table class="table table-striped table-bordered table-condensed table-hover" id='estable'>
               <tr>
                   <th>TAG</th>

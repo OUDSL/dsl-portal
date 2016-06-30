@@ -162,7 +162,13 @@ function search(term){
         url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match_phrase':{'DATA':{'query':'" + term + "','type':'phrase'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
     }
      //need to add a user element to assign the lines above and below
-     lines_above_below = 5;
+     if ($('#contextlines').val()==""){
+        $('#contextlines').val(5)
+        lines_above_below = 5;
+     } else{
+        lines_above_below = parseInt($('#contextlines').val());
+     }
+     //lines_above_below = 5;
      if (page == 0){
         $("#result_tbody").empty();
         url_param = "&page=1&page_size=" + page_size
@@ -185,7 +191,10 @@ function search(term){
                     }
                     $('.tr-all').hide();
                     $(".page"+page).show();
-                    $('.page-content').text('Page ' + page_num +' of ' + total_pages);
+                    tot_ret = data.hits.total
+                    hear_total = data.aggregations.hearing_count.value
+                    if ( hear_total > tot_ret ){hear_total = tot_ret;}
+                    $('.page-content').text( "Search Results: " + tot_ret.toString() + "  Total Hearings:  " +  hear_total.toString() + ' --- Page ' + page_num + ' of ' + total_pages);
                 }
             });
             page=1;
@@ -194,16 +203,15 @@ function search(term){
         $.each(data.hits.hits,function(itm,val){
 	   content_lines(val,lines_above_below,tr_tmpl,"result_tbody",page) 
         });
-        try {
+        /*try {
             tot_ret = data.hits.total
             hear_total = data.aggregations.hearing_count.value
             if ( hear_total > tot_ret ){hear_total = tot_ret;}
             $('#result_nums').text("Search Results: " + tot_ret.toString() + "  Total Hearings:  " +  hear_total.toString() );
         }catch(e){
             console.log(e);
-        }
-     }
-     );
+        }*/
+     });
 }
 function content_lines(val,lines,templ,html){
      lowEnd= parseInt(val._id) - lines;
