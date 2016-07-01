@@ -97,11 +97,41 @@ $(function() {
         inputs.push($(this)[0]);
     });
     g_inputs = inputs;
+    console.log(g_inputs);
 });
     var output = [];
     var result= [];
 
     $("#button").click(function () {
+        var tags = $("tr td.tag");
+    var tag = [];
+    var data= [];
+    var inputs = [];
+
+    $(tags).each(function()
+    {
+        tag.push($(this).text().trim());
+    });
+    g_tag = tag;
+    // console.log(tag);
+
+    $("tr td.data").each(function()
+    {
+        data.push($(this).text().trim());
+    });
+    g_data = data;
+    var temp = $(".csv");
+
+    $(temp).each(function()
+    {
+        inputs.push($(this)[0]);
+    });
+    g_inputs = inputs;
+    console.log(g_inputs);
+
+
+    
+        // $("#sall").trigger("click");
         var tags = $("tr td.tag");
         var alldata = [];
         for(i=0; i<tags.length; i++){
