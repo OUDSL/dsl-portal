@@ -370,12 +370,13 @@ function load_task_history(url){
     //source = $('#tr-template').html();
     //tr_template = Handlebars.compile(source);
     tr_template = Handlebars.templates['tmpl-tr']
-    $('#result_tbody').html("")//clear table
+    $('#result_tbody_history').html("")//clear table
     $.each(data.results, function(i, item) {
         temp=item.task_name.split('.')
         item['task_name']= temp[temp.length-1]
         item.timestamp = item.timestamp.substring(0,19).replace('T',' ')
-        $('#result_tbody').append(tr_template(item)) 
+        console.log(item)
+        $('#result_tbody_history').append(tr_template(item)) 
     });
     });
 }
