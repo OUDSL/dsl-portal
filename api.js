@@ -263,13 +263,20 @@ function content_lines(val,lines,templ,html){
 	    	temp_data= temp_data + v._source.DATA + "  ";
                 //}
 	    }
-        // console.log(temp_data);
-        // temp_data="";
+                // console.log(temp_data);
+                // temp_data="";
 
-	}
-    );
+	    }
+        );
 	$("#" + html).append(templ({"PAGE":"page"+page,"LINK":"/dsl-portal/htmlfiles/"+val._source.TAG+".htm","TAG":val._source.TAG,"DATA":temp_data}))
         $("#" + html).highlight($('#search').val().replace(/\"/g," ").trim().split(" "));
+        //This has to be here because you can not put event when item has not been placed on the page
+        $('.csv').on("click",function(){
+            console.log('fired');
+            if(this.checked){
+                console.log(this)
+            }
+        });
      });
 }
 function submit_user(){
