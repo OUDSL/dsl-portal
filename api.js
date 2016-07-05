@@ -375,6 +375,7 @@ function load_task_history(url){
         temp=item.task_name.split('.')
         item['task_name']= temp[temp.length-1]
         item.timestamp = item.timestamp.substring(0,19).replace('T',' ')
+        item.result=item.result.replace('http','https')
         console.log(item)
         $('#result_tbody_history').append(tr_template(item)) 
     });
