@@ -182,7 +182,7 @@ function load_es_data(){
 }});
 
 function submit_task(){
-    url = base_url + "/queue/run/dslq.tasks.tasks.search_stats"
+    url = base_url + "/queue/run/dslq.tasks.tasks.search_stats/"
     task_name = "dslq.tasks.tasks.search_stats"
     params = ["victoria","hearing",searchterm]
     task_data = {"function": task_name,"queue": "celery","args":params,"kwargs":{},"tags":[]};
