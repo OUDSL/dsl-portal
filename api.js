@@ -194,7 +194,8 @@ function submit_task(){
     task_data = {"function": task_name,"queue": "celery","args":params,"kwargs":{},"tags":[]};
     $.ajax({type: "POST", url: url,data: JSON.stringify(task_data), dataType: "json", success: function(data){
         console.log(data);
-    },beforeSend: function(request){
+    },beforeSend: function(xhr, settings){
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
         //request.setRequestHeader('Authorization', '"Token 570ca6a44263f4b7513f744733efec0ec2757b5c');
     }});
 
