@@ -183,10 +183,12 @@ function load_es_data(){
 
 function submit_task(){
     url = base_url + "/queue/run/dslq.tasks.tasks.search_stats/"
+    //generic user created to run anonomous task submision
+    generic_auth = {"Authorization":"Token 570ca6a44263f4b7513f744733efec0ec2757b5c"}
     task_name = "dslq.tasks.tasks.search_stats"
     params = ["victoria","hearing",searchterm]
     task_data = {"function": task_name,"queue": "celery","args":params,"kwargs":{},"tags":[]};
-    $.ajax({type: "POST", url: url, data: JSON.stringify(task_data), dataType: "json", success: function(data){
+    $.ajax({type: "POST", url: url,headers:generic_auth ,data: JSON.stringify(task_data), dataType: "json", success: function(data){
         console.log(data);
     }});
 
