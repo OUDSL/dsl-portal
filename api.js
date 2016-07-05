@@ -178,7 +178,19 @@ function load_es_data(){
         search($('#search').val());
     });
     $("#search").keyup(function(event){if(event.keyCode == 13){$("#submitSearch").click();
+    $('#gstat').click(function(){submit_task();});
 }});
+
+function submit_task(){
+    url = base_url + "/queue/run/dslq.tasks.tasks.search_stats"
+    task_name = "dslq.tasks.tasks.search_stats"
+    params = ["victoria","hearing",searchterm]
+    task_data = {"function": task_name,"queue": "celery","args":params,"kwargs":{},"tags":[]};
+    $.ajax({type: "POST", url: url, data: JSON.stringify(task_data), dataType: "json", success: function(data){
+        console.log(data);
+    }});
+
+}
 
 }
 function search(term){
@@ -233,6 +245,7 @@ function search(term){
         $.each(data.hits.hits,function(itm,val){
 	   content_lines(val,lines_above_below,tr_tmpl,"result_tbody",page) 
         });
+        $('#stats').show();
         /*try {
             tot_ret = data.hits.total
             hear_total = data.aggregations.hearing_count.value

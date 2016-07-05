@@ -2,7 +2,7 @@
 <div class="form-inline" style="margin-bottom:5px">
 <label class="control-label" for="ssearch">Search</label>
 <input type="text" class="form-control" name="ssearch" id="search" style="min-width:50%;max-width:60%"><label class="control-label" for="cline">Context Lines</label><input type="number" id="contextlines" name="cline" class="form-control bfh-number" min="0" max="10" value=5 style="width:80px">
-<button class="btn btn-primary" id="submitSearch">Search</button><label style="float:right;margin-right:10%" id="result_nums"></label>
+<button class="btn btn-primary" id="submitSearch">Search</button>
 </div>
 <div class="form-control" style="margin-bottom:30px;">
      <label class="radio-inline"><input type="radio" class="optradio" name="optradio" value="0" checked><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html#query-string-syntax" target="_blank">Query String</a></label>
@@ -21,7 +21,21 @@
                   <th>DATA</th>
                   <th>SELECT</th>
               </tr>
-            <tbody id='result_tbody'>
+              <tr id="stats" style="display:none">
+                <th colspan="2"><div id='stat_result'></div></th>
+                <th > <div class="dropdown pull-right">
+                        <button class="btn btn-primary  dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Statistics
+                        <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+                            <li><a id="gstat" href="#">General Stats</a></li>
+                        </ul>
+                    </div>
+                </th>
+                
+              </tr>
+              <tbody id='result_tbody'>
               </tbody>
 </table>
 <div id="paginate-div-bt" style="text-align:center"></div>
