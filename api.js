@@ -1,3 +1,6 @@
+    //Globat Variables
+    var output = [];
+    var result= [];
 $(function() {
     //Customize by setting base_url to cybercom/api docker application
     base_url = "https://dev.libraries.ou.edu/api-dsl";
@@ -97,61 +100,8 @@ $(function() {
         inputs.push($(this)[0]);
     });
     g_inputs = inputs;
-    console.log(g_inputs);
+    // console.log(g_inputs);
 });
-    var output = [];
-    var result= [];
-
-    $("#button").click(function () {
-        var tags = $("tr td.tag");
-    var tag = [];
-    var data= [];
-    var inputs = [];
-
-    $(tags).each(function()
-    {
-        tag.push($(this).text().trim());
-    });
-    g_tag = tag;
-    // console.log(tag);
-
-    $("tr td.data").each(function()
-    {
-        data.push($(this).text().trim());
-    });
-    g_data = data;
-    var temp = $(".csv");
-
-    $(temp).each(function()
-    {
-        inputs.push($(this)[0]);
-    });
-    g_inputs = inputs;
-    console.log(g_inputs);
-
-
-    
-        // $("#sall").trigger("click");
-        var tags = $("tr td.tag");
-        var alldata = [];
-        for(i=0; i<tags.length; i++){
-            alldata.push({tag: g_tag[i], data: g_data[i], myinput: g_inputs[i]})
-        }
-                // console.log("hello tag push check"+alldata);
-                // console.log("hello here"+alldata);
-
-
-        for(i=0; i<alldata.length; i++){
-            if(alldata[i].myinput.checked) {
-                output.push(alldata[i]);
-            }
-        }
-        console.log(output);
-        for(i=0;i<output.length;i++)
-        {
-            result.push({tag:output[i].tag,data:output[i].data});
-        }
-    });
 
     $("#final").on("click",function()
     {
@@ -294,11 +244,56 @@ function content_lines(val,lines,templ,html){
         $("#" + html).highlight($('#search').val().replace(/\"/g," ").trim().split(" "));
         //This has to be here because you can not put event when item has not been placed on the page
         $('.csv').on("click",function(){
-            console.log('fired');
             if(this.checked){
-                console.log(this)
-            }
-        });
+                // console.log(this)
+                var tags = $("tr td.tag");
+                var tag = [];
+                var data= [];
+                var inputs = [];
+
+                $(tags).each(function()
+                {
+                    tag.push($(this).text().trim());
+                });
+                g_tag = tag;
+                // console.log(tag);
+
+                $("tr td.data").each(function()
+                {
+                    data.push($(this).text().trim());
+                });
+                g_data = data;
+                var temp = $(".csv");
+
+                $(temp).each(function()
+                {
+                    inputs.push($(this)[0]);
+                });
+                g_inputs = inputs;
+                //console.log(g_inputs);
+
+                // $("#sall").trigger("click");
+                var tags = $("tr td.tag");
+                var alldata = [];
+                for(i=0; i<tags.length; i++){
+                    alldata.push({tag: g_tag[i], data: g_data[i], myinput: g_inputs[i]})
+                }
+                        // console.log("hello tag push check"+alldata);
+                        // console.log("hello here"+alldata);
+
+
+                for(i=0; i<alldata.length; i++){
+                    if(alldata[i].myinput.checked) {
+                        output.push(alldata[i]);
+                    }
+                }
+                // console.log(output);
+                for(i=0;i<output.length;i++)
+                {
+                    result.push({tag:output[i].tag,data:output[i].data});
+                }
+                    }
+                });
      });
 }
 function submit_user(){
