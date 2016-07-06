@@ -132,16 +132,29 @@ function load_es_data(){
 }});
 
 function submit_task(){
+
+    checked_value=$('input[name=optradio]:checked').val()
+    if (checked_value=="0"){
+            query = "{'query':{'query_string':{'query':'" + searchterm + "'}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
+    }else if (checked_value=="1"){
+            query = "{'query':{'match':{'DATA':{'query':'" + searchterm + "','operator':'and'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
+    }else{
+           query ="{'query':{'match_phrase':{'DATA':{'query':'" + searchterm + "','type':'phrase'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
+    }
+
+
+
     //authentication requiremed to submit task
-    set_auth(base_url,login_url)
-    $("#myTab").show()
-    load_task_history(user_task_url);
+    //set_auth(base_url,login_url)
+    //$("#myTab").show()
+    //load_task_history(user_task_url);
     url = base_url + "/queue/run/dslq.tasks.tasks.search_stats/"
     //generic user created to run anonomous task submision
     //generic_auth = {"Authorization":"Token 570ca6a44263f4b7513f744733efec0ec2757b5c"}
     task_name = "dslq.tasks.tasks.search_stats"
-    params = ["victoria","hearing",searchterm]
-    task_data = {"function": task_name,"queue": "celery","args":params,"kwargs":{},"tags":[]};
+    params = ["victoria","hearing",query]
+    task_data = {"function": task_name,"queue": "celery","args":params,"kwargs":{},"tags":[searchterm]};
+    console.log("fired")
     $.postJSON(url,task_data,function(data){
             console.log(data);
         });
