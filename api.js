@@ -142,15 +142,31 @@ function submit_task(){
     task_name = "dslq.tasks.tasks.search_stats"
     params = ["victoria","hearing",searchterm]
     task_data = {"function": task_name,"queue": "celery","args":params,"kwargs":{},"tags":[]};
-    $.ajax({type: "POST", url: url,data: JSON.stringify(task_data), dataType: "json", success: function(data){
-        console.log(data);
-    },beforeSend: function(xhr, settings){
-        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    $.postJSON(url,task_data,function(data){
+            console.log(data);
+        });
+    //$.ajax({type: "POST", url: url,data: JSON.stringify(task_data), dataType: "json", success: function(data){
+    //    console.log(data);
+    //},beforeSend: function(xhr, settings){
+    //    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
         //request.setRequestHeader('Authorization', '"Token 570ca6a44263f4b7513f744733efec0ec2757b5c');
-    }});
+    //}});
 
 }
-
+$.postJSON = function(url, data, callback,fail) {
+    return jQuery.ajax({
+        'type': 'POST',
+        'url': url,
+        'contentType': 'application/json',
+        'data': JSON.stringify(data),
+        'dataType': 'json',
+        'success': callback,
+        'error':fail,
+        'beforeSend':function(xhr, settings){
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    });
+}; 
 }
 function search(term){
     checked_value=$('input[name=optradio]:checked').val()
@@ -349,8 +365,9 @@ function set_auth(base_url,login_url){
         $('#reset_password').click(function(){$('#pass_form').toggle(!$('#pass_form').is(':visible'));});
     })
     .fail(function() {
+        //$('#login-modal').modal("show")
         var slink = login_url.concat(document.URL);
-        window.location = slink
+         window.location = slink
     });
 }
 function activaTab(tab){
