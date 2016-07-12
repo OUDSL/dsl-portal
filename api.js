@@ -160,7 +160,7 @@ function submit_task(){
 
 
     //authentication requiremed to submit task
-    if($('#myTab').is(':visible')){
+    if(!$('#myTab').is(':visible')){
         set_auth(base_url,login_url);
         $("#myTab").show();
         $('#user').show();
