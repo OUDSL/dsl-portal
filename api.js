@@ -160,10 +160,12 @@ function submit_task(){
 
 
     //authentication requiremed to submit task
-    set_auth(base_url,login_url)
-    $("#myTab").show()
-    $('#user').hide()
-    load_task_history(user_task_url);
+    if($('#myTab').is(':visible')){
+        set_auth(base_url,login_url);
+        $("#myTab").show();
+        $('#user').show();
+        load_task_history(user_task_url);
+    }
     url = base_url + "/queue/run/dslq.tasks.tasks.search_stats/"
     //generic user created to run anonomous task submision
     //generic_auth = {"Authorization":"Token 570ca6a44263f4b7513f744733efec0ec2757b5c"}
