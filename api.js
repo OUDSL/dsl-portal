@@ -23,7 +23,7 @@ $(function() {
                     return ""
                 } 
     });
-    $('#user').hide()
+    //$('#user').hide()
     $('#myTab').hide()
     load_es_data();
 
@@ -157,9 +157,9 @@ function submit_task(){
 
 
     //authentication requiremed to submit task
-    //set_auth(base_url,login_url)
-    //$("#myTab").show()
-    //load_task_history(user_task_url);
+    set_auth(base_url,login_url)
+    $("#myTab").show()
+    load_task_history(user_task_url);
     url = base_url + "/queue/run/dslq.tasks.tasks.search_stats/"
     //generic user created to run anonomous task submision
     //generic_auth = {"Authorization":"Token 570ca6a44263f4b7513f744733efec0ec2757b5c"}
@@ -381,7 +381,7 @@ function set_password(){
 function set_auth(base_url,login_url){
     $.getJSON( base_url + "/user/.json",function(data){
         $('#user').html(data['username'].concat( ' <span class="caret"></span> '));
-        $("#user").append($('<img style="border-radius:80px;">').attr("src",data['gravator_url'] + "?s=40&d=mm") );
+        $("#user").append($('<img style="border-radius:80px;">').attr("src",data['gravator_url'].replace('http','https') +"?s=40&d=mm") );
         data.csrftoken = getCookie('csrftoken')
         //source = $('#user-template').html()
         //user_template = Handlebars.compile(source);
