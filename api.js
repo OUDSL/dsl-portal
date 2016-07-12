@@ -127,8 +127,8 @@ function load_es_data(){
         $('#paginate-div-bt').append(template({}))
         searchterm=$('#search').val()
         search($('#search').val());
-        //$('#gstat').unbind( "click" );
-        //$('#gstat').click(function(){submit_task();});
+        $('#gstat').unbind( "click" );
+        $('#gstat').click(function(){submit_task();});
     });
     $("#search").keyup(function(event){
         if(event.keyCode == 13){
@@ -186,7 +186,7 @@ $.postJSON = function(url, data, callback,fail) {
         }
     });
 }; 
-}
+
 function search(term){
     checked_value=$('input[name=optradio]:checked').val()
     //console.log(term)
