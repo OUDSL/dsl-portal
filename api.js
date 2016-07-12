@@ -117,6 +117,7 @@ function load_es_data(){
     template = Handlebars.templates['tmpl-es']
     tr_tmpl=Handlebars.templates['tmpl-tres']
     $('#home').append(template({}))
+    $('#gstat').click(function(){submit_task();});
     $('#submitSearch').click(function(){
         page=0;total_pages=0;
         $('#paginate-div').empty();
@@ -126,11 +127,16 @@ function load_es_data(){
         $('#paginate-div-bt').append(template({}))
         searchterm=$('#search').val()
         search($('#search').val());
+        //$('#gstat').unbind( "click" );
+        //$('#gstat').click(function(){submit_task();});
     });
-    $("#search").keyup(function(event){if(event.keyCode == 13){$("#submitSearch").click();
-    $('#gstat').click(function(){submit_task();});
-}});
-
+    $("#search").keyup(function(event){
+        if(event.keyCode == 13){
+            $("#submitSearch").click();
+            //$('#gstat').click(function(){submit_task();});
+        }
+    });
+}
 function submit_task(){
 
     checked_value=$('input[name=optradio]:checked').val()
@@ -479,7 +485,18 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-
+jQuery.extend({
+    parseQuerystring: function() {
+        var nvpair = {};
+        var qs = window.location.search.replace('?', '');
+        var pairs = qs.split('&');
+        $.each(pairs, function(i, v) {
+            var pair = v.split('=');
+            nvpair[pair[0]] = pair[1];
+        });
+        return nvpair;
+    }
+});
 function filterhide(input)
     {
         $("tr td.tag").each(function() {
