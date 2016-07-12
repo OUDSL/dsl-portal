@@ -147,7 +147,13 @@ function submit_task(){
     }else{
            query ="{'query':{'match_phrase':{'DATA':{'query':'" + searchterm + "','type':'phrase'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
     }
-
+    //need to add a user element to assign the lines above and below
+     if ($('#contextlines').val()==""){
+        $('#contextlines').val(5)
+        lines_above_below = 5;
+     } else{
+        lines_above_below = parseInt($('#contextlines').val());
+     }
 
 
     //authentication requiremed to submit task
@@ -159,9 +165,11 @@ function submit_task(){
     //generic_auth = {"Authorization":"Token 570ca6a44263f4b7513f744733efec0ec2757b5c"}
     task_name = "dslq.tasks.tasks.search_stats"
     params = ["victoria","hearing",query]
-    task_data = {"function": task_name,"queue": "celery","args":params,"kwargs":{},"tags":[searchterm]};
+    task_data = {"function": task_name,"queue": "celery","args":params,"kwargs":{"context_pages":lines_above_below},"tags":[searchterm]};
     console.log("fired")
     $.postJSON(url,task_data,function(data){
+            $('#stat_result').html(data.result_url);
+            $('#stat_result').urlize();
             console.log(data);
         });
     //$.ajax({type: "POST", url: url,data: JSON.stringify(task_data), dataType: "json", success: function(data){
