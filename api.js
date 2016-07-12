@@ -18,12 +18,12 @@ $(function() {
     $('#nextlink').click(function(){load_task_history(nextlink);});
     Handlebars.registerHelper('json_metatags', function(context) {
                 if (typeof context !== 'undefined') {
-                    return JSON.stringify(context).replace(/"/g,'').replace(/\[/g,'').replace(/\]/g,'').replace(/,/g,', ');
+                    return JSON.stringify(context).replace(/\\/g,'').replace(/\[/g,'').replace(/\]/g,'').replace(/,/g,', ');
                 }else{
                     return ""
                 } 
     });
-    //$('#user').hide()
+    $('#user').hide()
     $('#myTab').hide()
     load_es_data();
 
@@ -142,10 +142,13 @@ function submit_task(){
     checked_value=$('input[name=optradio]:checked').val()
     if (checked_value=="0"){
             query = "{'query':{'query_string':{'query':'" + searchterm + "'}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
+            query_type = "QueryString"
     }else if (checked_value=="1"){
             query = "{'query':{'match':{'DATA':{'query':'" + searchterm + "','operator':'and'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
+            query_type = "Match"
     }else{
            query ="{'query':{'match_phrase':{'DATA':{'query':'" + searchterm + "','type':'phrase'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
+           query_type = "MatchPhrase"
     }
     //need to add a user element to assign the lines above and below
      if ($('#contextlines').val()==""){
@@ -159,13 +162,14 @@ function submit_task(){
     //authentication requiremed to submit task
     set_auth(base_url,login_url)
     $("#myTab").show()
+    $('#user').hide()
     load_task_history(user_task_url);
     url = base_url + "/queue/run/dslq.tasks.tasks.search_stats/"
     //generic user created to run anonomous task submision
     //generic_auth = {"Authorization":"Token 570ca6a44263f4b7513f744733efec0ec2757b5c"}
     task_name = "dslq.tasks.tasks.search_stats"
     params = ["victoria","hearing",query]
-    task_data = {"function": task_name,"queue": "celery","args":params,"kwargs":{"context_pages":lines_above_below},"tags":[searchterm]};
+    task_data = {"function": task_name,"queue": "celery","args":params,"kwargs":{"context_pages":lines_above_below},"tags":["query="+ searchterm,"query-type=" + query_type ]};
     console.log("fired")
     $.postJSON(url,task_data,function(data){
             $('#stat_result').html(data.result_url);
