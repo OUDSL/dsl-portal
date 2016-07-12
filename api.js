@@ -174,7 +174,8 @@ function submit_task(){
     $.postJSON(url,task_data,function(data){
             $('#stat_result').html(data.result_url);
             $('#stat_result').urlize();
-            console.log(data);
+            //console.log(data);
+            load_task_history(user_task_url);
         });
     //$.ajax({type: "POST", url: url,data: JSON.stringify(task_data), dataType: "json", success: function(data){
     //    console.log(data);
@@ -420,7 +421,7 @@ function load_task_history(url){
         item['task_name']= temp[temp.length-1]
         item.timestamp = item.timestamp.substring(0,19).replace('T',' ')
         item.result=item.result.replace('http','https')
-        console.log(item)
+        //console.log(item)
         $('#result_tbody_history').append(tr_template(item)) 
     });
     });
