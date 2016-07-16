@@ -380,6 +380,7 @@ function set_auth(base_url,login_url){
         //$('#login-modal').modal("show")
         //var slink = login_url.concat(document.URL);
         //window.location = slink
+        $('#login_menu').hide()
         console.log("login required")
     });
 }
