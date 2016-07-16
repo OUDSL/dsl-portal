@@ -374,6 +374,7 @@ function set_auth(base_url,login_url){
         //show user tabs
         $("#myTab").show();
         guest=false;
+        $('#login_menu').show()
     })
     .fail(function() {
         //$('#login-modal').modal("show")
