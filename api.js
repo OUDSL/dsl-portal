@@ -374,13 +374,13 @@ function set_auth(base_url,login_url){
         //show user tabs
         $("#myTab").show();
         guest=false;
-        $('#login_menu').show()
+        $('.login_menu').show()
     })
     .fail(function() {
         //$('#login-modal').modal("show")
         //var slink = login_url.concat(document.URL);
         //window.location = slink
-        $('#login_menu').hide()
+        $('.login_menu').hide()
         console.log("login required")
     });
 }
