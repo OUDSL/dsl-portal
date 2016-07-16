@@ -1,6 +1,3 @@
-    //Globat Variables
-    var output = [];
-    var result= [];
 $(function() {
     //Customize by setting base_url to cybercom/api docker application
     base_url = "https://dev.libraries.ou.edu/api-dsl";
@@ -10,7 +7,9 @@ $(function() {
     user_task_url = base_url + "/queue/usertasks/.json?page_size=10";
     user_url = base_url + "/user/?format=json";
     prevlink=null;nextlink=null;page=0;page_size=50;searchterm="";total_pages=0;
-    //set_auth(base_url,login_url);
+    output=[];result=[];guest=true;
+    //check auth
+    set_auth(base_url,login_url);
     $("#aprofile").click(function(){activaTab('profile')})
     $("#alogout").click(function(){window.location = logout_url.concat(document.URL);})
     //load_task_history(user_task_url);
@@ -23,7 +22,8 @@ $(function() {
                     return ""
                 } 
     });
-    $('#user').hide()
+    $('#user').click(function(){if($('#user').html()=="Login"){window.location = login_url.concat(document.URL);}});
+    //$('#user').hide()
     $('#myTab').hide()
     load_es_data();
 
@@ -133,12 +133,18 @@ function load_es_data(){
     $("#search").keyup(function(event){
         if(event.keyCode == 13){
             $("#submitSearch").click();
-            //$('#gstat').click(function(){submit_task();});
         }
     });
 }
 function submit_task(){
-
+    //authentication requiremed to submit task
+    if(!$('#myTab').is(':visible')){
+        set_auth(base_url,login_url);
+        //$("#myTab").show();
+        //$('#user').show();
+        //load_task_history(user_task_url);
+    }
+    //Check query and set query string and query_type
     checked_value=$('input[name=optradio]:checked').val()
     if (checked_value=="0"){
             query = "{'query':{'query_string':{'query':'" + searchterm + "'}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
@@ -150,43 +156,29 @@ function submit_task(){
            query ="{'query':{'match_phrase':{'DATA':{'query':'" + searchterm + "','type':'phrase'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
            query_type = "MatchPhrase"
     }
-    //need to add a user element to assign the lines above and below
+    //Check user input of context lines above and below
      if ($('#contextlines').val()==""){
         $('#contextlines').val(5)
         lines_above_below = 5;
      } else{
         lines_above_below = parseInt($('#contextlines').val());
      }
-
-
-    //authentication requiremed to submit task
-    if(!$('#myTab').is(':visible')){
-        set_auth(base_url,login_url);
-        $("#myTab").show();
-        $('#user').show();
-        load_task_history(user_task_url);
-    }
+    //url to submit task
     url = base_url + "/queue/run/dslq.tasks.tasks.search_stats/"
-    //generic user created to run anonomous task submision
-    //generic_auth = {"Authorization":"Token 570ca6a44263f4b7513f744733efec0ec2757b5c"}
+    //Set task Data to submit 
     task_name = "dslq.tasks.tasks.search_stats"
     params = ["victoria","hearing",query]
     task_data = {"function": task_name,"queue": "celery","args":params,"kwargs":{"context_pages":lines_above_below},"tags":["query="+ searchterm,"query-type=" + query_type ]};
     console.log("fired")
+    //Submit task and set result url and load current history with latest task.
     $.postJSON(url,task_data,function(data){
             $('#stat_result').html(data.result_url);
             $('#stat_result').urlize();
             //console.log(data);
             load_task_history(user_task_url);
         });
-    //$.ajax({type: "POST", url: url,data: JSON.stringify(task_data), dataType: "json", success: function(data){
-    //    console.log(data);
-    //},beforeSend: function(xhr, settings){
-    //    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-        //request.setRequestHeader('Authorization', '"Token 570ca6a44263f4b7513f744733efec0ec2757b5c');
-    //}});
-
 }
+//extend jquery to customize AJAX task submission
 $.postJSON = function(url, data, callback,fail) {
     return jQuery.ajax({
         'type': 'POST',
@@ -206,11 +198,14 @@ function search(term){
     checked_value=$('input[name=optradio]:checked').val()
     //console.log(term)
     if (checked_value=="0"){
-        url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'query_string':{'query':'" + term + "'}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
+        url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'query_string':{'query':'" + term 
+        url = url + "'}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
     }else if (checked_value=="1"){
-        url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match':{'DATA':{'query':'" + term + "','operator':'and'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
+        url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match':{'DATA':{'query':'" + term 
+        url = url + "','operator':'and'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
     }else{
-        url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match_phrase':{'DATA':{'query':'" + term + "','type':'phrase'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
+        url = base_url + "/es/data/victoria/hearing/.json?query={'query':{'match_phrase':{'DATA':{'query':'" + term 
+        url = url + "','type':'phrase'}}},'aggs':{'hearing_count':{'cardinality':{'field':'TAG'}}}}"
     }
      //need to add a user element to assign the lines above and below
      if ($('#contextlines').val()==""){
@@ -254,15 +249,9 @@ function search(term){
         $.each(data.hits.hits,function(itm,val){
 	   content_lines(val,lines_above_below,tr_tmpl,"result_tbody",page) 
         });
-        $('#stats').show();
-        /*try {
-            tot_ret = data.hits.total
-            hear_total = data.aggregations.hearing_count.value
-            if ( hear_total > tot_ret ){hear_total = tot_ret;}
-            $('#result_nums').text("Search Results: " + tot_ret.toString() + "  Total Hearings:  " +  hear_total.toString() );
-        }catch(e){
-            console.log(e);
-        }*/
+        if(!guest){
+            $('#stats').show();
+        }
      });
 }
 function content_lines(val,lines,templ,html){
@@ -272,24 +261,14 @@ function content_lines(val,lines,templ,html){
      for (var i=lowEnd;i<=highEnd;i++){list.push(i);}
      ids= list.join(",")
      url = base_url + "/es/data/victoria/hearing/.json?esaction=mget&ids="+ ids
-     // console.log(ids);
-     
      $.getJSON( url ,function(data){
         temp_data = ""
 	$.each(data.docs,function(i,v){
 	    if(v.found && v._source.TAG == val._source.TAG){
-
-                //if(v._id == val._id){ 
-                //    temp_data= temp_data + "<hr><span class='es_search'>" +  v._source.DATA + "</span><hr>";
-                //}else{
 	    	temp_data= temp_data + v._source.DATA + "  ";
-                //}
 	    }
-                // console.log(temp_data);
-                // temp_data="";
 
-	    }
-        );
+	});
 	$("#" + html).append(templ({"PAGE":"page"+page,"LINK":"/dsl-portal/htmlfiles/"+val._source.TAG+".htm","TAG":val._source.TAG,"DATA":temp_data}))
         $("#" + html).highlight($('#search').val().replace(/\"/g," ").trim().split(" "));
         //This has to be here because you can not put event when item has not been placed on the page
@@ -320,24 +299,16 @@ function content_lines(val,lines,templ,html){
                     inputs.push($(this)[0]);
                 });
                 g_inputs = inputs;
-                //console.log(g_inputs);
-
-                // $("#sall").trigger("click");
                 var tags = $("tr td.tag");
                 var alldata = [];
                 for(i=0; i<tags.length; i++){
                     alldata.push({tag: g_tag[i], data: g_data[i], myinput: g_inputs[i]})
                 }
-                        // console.log("hello tag push check"+alldata);
-                        // console.log("hello here"+alldata);
-
-
                 for(i=0; i<alldata.length; i++){
                     if(alldata[i].myinput.checked) {
                         output.push(alldata[i]);
                     }
                 }
-                // console.log(output);
                 for(i=0;i<output.length;i++)
                 {
                     result.push({tag:output[i].tag,data:output[i].data});
@@ -387,8 +358,9 @@ function set_password(){
 }
 function set_auth(base_url,login_url){
     $.getJSON( base_url + "/user/.json",function(data){
+        data.gravator_url=data.gravator_url.replace('http','https')
         $('#user').html(data['username'].concat( ' <span class="caret"></span> '));
-        $("#user").append($('<img style="border-radius:80px;">').attr("src",data['gravator_url'].replace('http','https') +"?s=40&d=mm") );
+        $("#user").append($('<img style="border-radius:80px;">').attr("src",data['gravator_url'] +"?s=40&d=mm") );
         data.csrftoken = getCookie('csrftoken')
         //source = $('#user-template').html()
         //user_template = Handlebars.compile(source);
@@ -397,11 +369,17 @@ function set_auth(base_url,login_url){
         $('#user_form').hide()
         $('#view_form').show() 
         $('#reset_password').click(function(){$('#pass_form').toggle(!$('#pass_form').is(':visible'));});
+        //load task history
+        load_task_history(user_task_url);
+        //show user tabs
+        $("#myTab").show();
+        guest=false;
     })
     .fail(function() {
         //$('#login-modal').modal("show")
-        var slink = login_url.concat(document.URL);
-         window.location = slink
+        //var slink = login_url.concat(document.URL);
+        //window.location = slink
+        console.log("login required")
     });
 }
 function activaTab(tab){
