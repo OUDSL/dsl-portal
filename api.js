@@ -391,8 +391,8 @@ function load_task_history(url){
     $.getJSON(url, function(data){
     prevlink = data.previous;
     nextlink = data.next;
-    if (prevlink == null){$('#li_prevlink').addClass("disabled");} else {$('#li_prevlink').removeClass("disabled");prevlink.replace('http','https');};
-    if (nextlink == null){$('#li_nextlink').addClass("disabled");} else {$('#li_nextlink').removeClass("disabled");nextlink.replace('http','https');};
+    if (prevlink == null){$('#li_prevlink').addClass("disabled");} else {$('#li_prevlink').removeClass("disabled");prevlink=data.previous.replace('http','https');};
+    if (nextlink == null){$('#li_nextlink').addClass("disabled");} else {$('#li_nextlink').removeClass("disabled");nextlink=data.next.replace('http','https');};
     setTaskDisplay(data);
     //source = $('#tr-template').html();
     //tr_template = Handlebars.compile(source);
