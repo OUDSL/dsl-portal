@@ -389,10 +389,10 @@ function activaTab(tab){
 };
 function load_task_history(url){
     $.getJSON(url, function(data){
-    prevlink = data.previous.replace('http','https');
-    nextlink = data.next.replace('http','https');
-    if (prevlink == null){$('#li_prevlink').addClass("disabled");} else {$('#li_prevlink').removeClass("disabled");};
-    if (nextlink == null){$('#li_nextlink').addClass("disabled");} else {$('#li_nextlink').removeClass("disabled");};
+    prevlink = data.previous;
+    nextlink = data.next;
+    if (prevlink == null){$('#li_prevlink').addClass("disabled");} else {$('#li_prevlink').removeClass("disabled");prevlink.replace('http','https');};
+    if (nextlink == null){$('#li_nextlink').addClass("disabled");} else {$('#li_nextlink').removeClass("disabled");nextlink.replace('http','https');};
     setTaskDisplay(data);
     //source = $('#tr-template').html();
     //tr_template = Handlebars.compile(source);
