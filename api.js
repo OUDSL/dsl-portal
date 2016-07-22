@@ -389,8 +389,8 @@ function activaTab(tab){
 };
 function load_task_history(url){
     $.getJSON(url, function(data){
-    prevlink = data.previous;
-    nextlink = data.next;
+    prevlink = data.previous.replace('http','https');
+    nextlink = data.next.replace('http','https');
     if (prevlink == null){$('#li_prevlink').addClass("disabled");} else {$('#li_prevlink').removeClass("disabled");};
     if (nextlink == null){$('#li_nextlink').addClass("disabled");} else {$('#li_nextlink').removeClass("disabled");};
     setTaskDisplay(data);
