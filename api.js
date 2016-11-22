@@ -593,7 +593,7 @@ function filterhide(input)
     for (x = 0; x < origLen; x++) {
         found = undefined;
         for (y = 0; y < newArr.length; y++) {
-            if (origArr[x].tag === newArr[y].tag) {
+            if (origArr[x].data === newArr[y].data) {
                 found = true;
                 break;
             }
